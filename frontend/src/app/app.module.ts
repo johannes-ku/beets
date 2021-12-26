@@ -8,13 +8,15 @@ import { PlayerModule } from '../../libs/player/src/lib/player.module';
 import { UserViewComponent } from './user-view/user-view.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QueueItemComponent } from './user-view/queue-item/queue-item.component';
+import { FormatSecondsPipe } from './format-seconds/format-seconds.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlayerViewComponent,
     UserViewComponent,
-    QueueItemComponent
+    QueueItemComponent,
+    FormatSecondsPipe
   ],
   imports: [
     BrowserModule,

@@ -27,7 +27,6 @@ export class PlayerService extends Observable<PlayerEvent> {
   }
   setYtTrack(code: string) {
     this.commands$.next(createPlayerCommandSetTrackYoutube(code));
-    this.commands$.next(createPlayerCommandPause());
   }
 
   play() {
@@ -35,8 +34,7 @@ export class PlayerService extends Observable<PlayerEvent> {
   }
 
   pause() {
-    this.setYtTrack('UaUa_0qPPgc');
-    // this.command$.next(createPlayerCommandPause());
+    this.commands$.next(createPlayerCommandPause());
   }
 
   registerView(view: PlayerServiceView) {

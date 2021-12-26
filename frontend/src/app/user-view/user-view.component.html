@@ -1,40 +1,66 @@
-<ng-container>
+<ng-container *ngIf="state != null; else loading">
   <div class="container user-view-container">
     <div class="card player-card">
       <div class="card-content">
         <div class="media is-flex is-align-items-center">
           <div class="media-left">
             <figure class="image">
-              <button (click)="play()" class="button is-primary is-large">
+              <button *ngIf="state.playingStateType === PlayingStateType.Paused"
+                      (click)="play()"
+                      class="button is-primary is-large">
                 <fa-icon [icon]="faPlay"></fa-icon>
               </button>
-              <button (click)="pause()" class="is-hidden button is-danger is-large">
+              <button *ngIf="state.playingStateType !== PlayingStateType.Paused"
+                      (click)="pause()"
+                      class="button is-danger is-large">
                 <fa-icon [icon]="faPause"></fa-icon>
               </button>
             </figure>
           </div>
           <div class="media-content">
             <p class="title is-4 is-flex is-align-items-center is-justify-content-space-between">
-              <span class="mr-2">Taking Hobbits to Isengard - 10 HOURS</span>
-              <button (click)="pause()" class="button is-link">
-                <fa-icon [icon]="faForward"></fa-icon>
-              </button>
+              <ng-container *ngIf="state.currentTrack != null">
+                <span class="mr-2">{{ state.currentTrack.name }}</span>
+                <button (click)="next()" class="button is-link">
+                  <fa-icon [icon]="faForward"></fa-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="state.currentTrack == null">
+                @Joh kui currentTrack on null
+              </ng-container>
             </p>
 
           </div>
         </div>
 
         <div class="content">
-          <progress class="progress is-small is-marginless" value="24352" max="36002"></progress>
-          <p>
-            <span>405:52</span>
-            <span class="is-pulled-right">600:02</span>
-          </p>
+          <ng-container *ngIf="state.currentTrack != null">
+            <progress class="progress is-small is-marginless"
+                      [value]="state.playingTime"
+                      [max]="state.currentTrack.length"></progress>
+            <p>
+              <span>{{ state.playingTime | formatSeconds }}</span>
+              <span class="is-pulled-right">{{ state.currentTrack.length | formatSeconds }}</span>
+            </p>
+          </ng-container>
+          <ng-container *ngIf="state.currentTrack == null">
+            <progress class="progress is-small is-marginless" value="0" max="0"></progress>
+            <p>
+              <span>{{ 0 | formatSeconds }}</span>
+              <span class="is-pulled-right">{{ 0 | formatSeconds }}</span>
+            </p>
+          </ng-container>
         </div>
       </div>
     </div>
-    <beets-queue-item [track]="exampleTrack"></beets-queue-item>
+    <beets-queue-item *ngFor="let track of state.queue" [track]="track"></beets-queue-item>
 
-
+    <button (click)="addSong()" class="button is-link">
+      jou
+    </button>
   </div>
 </ng-container>
+
+<ng-template #loading>
+  @JOh tee siia mingi asi
+</ng-template>

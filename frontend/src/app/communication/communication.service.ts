@@ -54,7 +54,9 @@ export class CommunicationService extends Observable<CommunicationMessage> {
       });
     });
     socket.addEventListener('message', (messageEvent: MessageEvent) => {
-      this.in$.next(JSON.parse(messageEvent.data));
+      const message: CommunicationMessage = JSON.parse(messageEvent.data);
+      console.log('<', message);
+      this.in$.next(message);
     });
     socket.addEventListener('close', () => {
       if (subscription != null) {
@@ -67,7 +69,7 @@ export class CommunicationService extends Observable<CommunicationMessage> {
   send(message: CommunicationMessage) {
     this.connect();
     this.out$.next(message);
-    console.log('Send message', message);
+    console.log('>', message);
   }
 
 }

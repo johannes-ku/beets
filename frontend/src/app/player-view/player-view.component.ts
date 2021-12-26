@@ -24,15 +24,8 @@ export class PlayerViewComponent implements OnInit, OnDestroy {
   constructor(private communicationService: CommunicationService,
               private playerService: PlayerService) { }
 
-  ngOnDestroy(): void {
-    this.componentDestroyed$.next();
-    this.componentDestroyed$.complete();
-  }
-
   ngOnInit() {
     this.communicationService.setIdentityAsPlayer();
-    // this.playerService.setYtTrack('sFHui_gTx-w');
-    // TODO: Unsibscribe
     this.communicationService
         .pipe(takeUntil(this.componentDestroyed$))
         .subscribe({
@@ -45,7 +38,7 @@ export class PlayerViewComponent implements OnInit, OnDestroy {
                 this.playerService.pause();
                 break;
               case CommunicationMessageType.SetPlayerTrack:
-                this.playerService.play();
+                this.playerService.setYtTrack(message.code);
                 break;
               default:
                 console.log(`Unexpected message ${message.type}`);
@@ -72,6 +65,11 @@ export class PlayerViewComponent implements OnInit, OnDestroy {
             }
           }
         });
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next();
+    this.componentDestroyed$.complete();
   }
 
 }

@@ -2,6 +2,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import {
   CommunicationMessage,
   CommunicationMessageAddTrack,
+  CommunicationMessagePaused,
   CommunicationMessageType,
   createCommunicationMessagePause,
   createCommunicationMessagePlay,
@@ -25,7 +26,7 @@ export class Server {
       100,
       undefined,
       []
-  )
+  );
 
   private playerSocket: SocketWrapper;
   private playerTimeUpdatingIntervalId: any;
@@ -85,7 +86,7 @@ export class Server {
             this.handlePlaying();
             break;
           case CommunicationMessageType.Paused:
-            this.handlePlaying();
+            this.handlePaused(message);
             break;
           default:
             socket.log(`Unexpected message ${message.type}`);
@@ -103,6 +104,7 @@ export class Server {
   private addUserSocket(socket: SocketWrapper) {
     this.userSockets.add(socket);
     // @ts-ignore
+    socket.send(createCommunicationMessagePlayerState(this.state));
     socket.subscribe({
       next: (message: CommunicationMessage) => {
         switch (message.type) {
@@ -154,11 +156,11 @@ export class Server {
     // TODO: Track props
     const track = createTrack(
         nanoid(8),
-        'Goat Song by Garry the Goat',
+        message.code + ' Goat Song by Garry the Goat',
         61,
         message.source,
         message.code
-    )
+    );
     this.state.queue.push(track);
     if (this.state.currentTrack == null) {
       this.nextTrack();
@@ -175,15 +177,16 @@ export class Server {
     this.stateUpdated();
   }
 
-  private handlePaused() {
+  private handlePaused(message: CommunicationMessagePaused) {
     this.state.playingStateType = PlayingStateType.Paused;
+    this.state.playingTime = message.time;
     this.stateUpdated();
   }
-
 
   private nextTrack() {
     const nextTrack = this.state.queue.shift();
     if (nextTrack == null) {
+      // TODO Somehow pause player
       return;
     }
     this.state.playingTime = 0;

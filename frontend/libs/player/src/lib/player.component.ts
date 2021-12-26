@@ -9,16 +9,15 @@ import {
   createPlayerEventPaused,
   createPlayerEventStarted
 } from './event';
+import { BufferedSubject } from '../../../../src/app/util/buffered-subject';
 
 @Component({
   selector: 'beets-player',
   template: `
-    <p>
-      <youtube-player [videoId]="dummyVideoId"
-                      (ready)="youtubePlayerReady($event)"
-                      (change)="youtubePlayerEvent($event)">
-      </youtube-player>
-    </p>
+    <youtube-player [videoId]="dummyVideoId"
+                    (ready)="youtubePlayerReady($event)"
+                    (change)="youtubePlayerEvent($event)">
+    </youtube-player>
   `,
   styles: []
 })
@@ -27,7 +26,7 @@ export class PlayerComponent implements OnInit, OnDestroy, PlayerServiceView {
   readonly dummyVideoId = 'Ar-IEE_DIEo';
 
   events$ = new Subject<any>();
-  youtubePlayer: YT.Player;
+  youtubePlayerCommands$ = new BufferedSubject<YoutubePlayerCommand>();
 
   constructor(private playerService: PlayerService) { }
 
@@ -42,36 +41,46 @@ export class PlayerComponent implements OnInit, OnDestroy, PlayerServiceView {
   commandHandler(command: PlayerCommand): void {
     switch (command.type) {
       case PlayerCommandType.Play:
-        this.youtubePlayer.playVideo();
+        this.youtubePlayerCommands$.next((player: YT.Player) => player.playVideo());
         break;
       case PlayerCommandType.Pause:
-        this.youtubePlayer.pauseVideo();
+        this.youtubePlayerCommands$.next((player: YT.Player) => player.pauseVideo());
         break;
       case PlayerCommandType.SetTrackYoutube:
-        this.youtubePlayer.loadVideoById(command.code);
+        this.youtubePlayerCommands$.next((player: YT.Player) => player.loadVideoById(command.code));
         break;
     }
   }
 
   youtubePlayerReady(player: YT.Player) {
-    this.youtubePlayer = player;
+    // TODO takeUntil
+    this.youtubePlayerCommands$
+        .subscribe({
+          next: (command: YoutubePlayerCommand) => command(player)
+        });
   }
 
   youtubePlayerEvent(event: YT.OnStateChangeEvent) {
+
     switch (event.data) {
       case YT.PlayerState.PLAYING:
         this.playerService.handleEvent(createPlayerEventStarted());
         break;
       case YT.PlayerState.PAUSED:
-        this.playerService.handleEvent(createPlayerEventPaused(this.youtubePlayer.getCurrentTime()));
+        this.playerService.handleEvent(createPlayerEventPaused(this.getYoutubePlayerTime(event.target)));
         break;
       case YT.PlayerState.ENDED:
         this.playerService.handleEvent(createPlayerEventEnded());
         break;
       case YT.PlayerState.BUFFERING:
-        this.playerService.handleEvent(createPlayerEventBuffering(this.youtubePlayer.getCurrentTime()));
+        this.playerService.handleEvent(createPlayerEventBuffering(this.getYoutubePlayerTime(event.target)));
         break;
     }
   }
+  private getYoutubePlayerTime(player: YT.Player): number {
+    return Math.floor(player.getCurrentTime());
+  }
 
 }
+
+type YoutubePlayerCommand = (player: YT.Player) => void;
