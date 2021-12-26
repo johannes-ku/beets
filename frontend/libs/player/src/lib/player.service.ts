@@ -1,34 +1,42 @@
 import { Injectable } from '@angular/core';
 import { PlayerServiceView } from './player-service-view';
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import {
   createPlayerCommandPause,
   createPlayerCommandPlay,
   createPlayerCommandSetTrackYoutube,
   PlayerCommand
 } from './command';
+import { PlayerEvent } from './event';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PlayerService {
+export class PlayerService extends Observable<PlayerEvent> {
 
   private view: PlayerServiceView;
   private viewEventSubscription: Subscription;
-  private command$ = new Subject<PlayerCommand>();
+  private commands$ = new Subject<PlayerCommand>();
+  private events$ = new Subject<PlayerEvent>();
 
-  constructor() { }
-
+  constructor() {
+    super(subscriber => {
+      const subscription = this.events$.subscribe(subscriber);
+      return () => subscription.unsubscribe();
+    });
+  }
   setYtTrack(code: string) {
-    this.command$.next(createPlayerCommandSetTrackYoutube(code));
+    this.commands$.next(createPlayerCommandSetTrackYoutube(code));
+    this.commands$.next(createPlayerCommandPause());
   }
 
   play() {
-    this.command$.next(createPlayerCommandPlay());
+    this.commands$.next(createPlayerCommandPlay());
   }
 
   pause() {
-    this.command$.next(createPlayerCommandPause());
+    this.setYtTrack('UaUa_0qPPgc');
+    // this.command$.next(createPlayerCommandPause());
   }
 
   registerView(view: PlayerServiceView) {
@@ -37,7 +45,7 @@ export class PlayerService {
     }
     this.view = view;
     this.viewEventSubscription = view.events$.subscribe((event: any) => this.handleEvent(event));
-    this.command$.subscribe((command: any) => view.commandHandler(command));
+    this.commands$.subscribe((command: any) => view.commandHandler(command));
   }
 
   unregisterView(view: PlayerServiceView) {
@@ -47,12 +55,12 @@ export class PlayerService {
     this.view = null;
     this.viewEventSubscription.unsubscribe();
     this.viewEventSubscription = null;
-    this.command$.complete();
-    this.command$ = new Subject<any>();
+    this.commands$.complete();
+    this.commands$ = new Subject<any>();
   }
 
-  private handleEvent(event: any) {
-    // TODO
+  handleEvent(event: PlayerEvent) {
+    this.events$.next(event);
   }
 
 }

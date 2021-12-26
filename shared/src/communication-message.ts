@@ -7,7 +7,10 @@ export enum CommunicationMessageType {
   IdentifyAsPlayer = 'IdentifyAsPlayer',
   IdentifyAsUser = 'IdentifyAsUser',
   PlayerState = 'PlayerState',
-  AddTrack = 'AddTrack'
+  AddTrack = 'AddTrack',
+  SetPlayerTrack = 'SetPlayerTrack',
+  Playing = 'Playing',
+  Paused = 'Paused',
 }
 
 export type CommunicationMessage =
@@ -17,7 +20,10 @@ export type CommunicationMessage =
     CommunicationMessageIdentifyAsPlayer |
     CommunicationMessageIdentifyAsUser |
     CommunicationMessagePlayerState |
-    CommunicationMessageAddTrack;
+    CommunicationMessageAddTrack |
+    CommunicationMessageSetPlayerTrack |
+    CommunicationMessagePlaying |
+    CommunicationMessagePaused;
 
 export interface CommunicationMessagePlay {
   readonly type: CommunicationMessageType.Play;
@@ -97,4 +103,44 @@ export function createCommunicationMessageAddTrack(source: TrackSource, code: st
   };
 }
 
+export interface CommunicationMessageSetPlayerTrack {
+  readonly type: CommunicationMessageType.SetPlayerTrack;
+  readonly source: TrackSource;
+  readonly code: string;
+  readonly startTime: number;
+}
 
+export function createCommunicationMessageSetPlayerTrack(
+    source: TrackSource,
+    code: string,
+    startTime: number,
+): CommunicationMessageSetPlayerTrack {
+  return {
+    type: CommunicationMessageType.SetPlayerTrack,
+    source,
+    code,
+    startTime
+  };
+}
+
+export interface CommunicationMessagePlaying {
+  readonly type: CommunicationMessageType.Playing;
+}
+
+export function createCommunicationMessagePlaying(): CommunicationMessagePlaying {
+  return {
+    type: CommunicationMessageType.Playing,
+  };
+}
+
+export interface CommunicationMessagePaused {
+  readonly type: CommunicationMessageType.Paused;
+  time: number;
+}
+
+export function createCommunicationMessagePaused(time: number): CommunicationMessagePaused {
+  return {
+    type: CommunicationMessageType.Paused,
+    time
+  };
+}

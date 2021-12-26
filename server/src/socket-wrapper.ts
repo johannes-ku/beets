@@ -2,6 +2,7 @@ import { MessageEvent, WebSocket } from 'ws';
 import { CommunicationMessage } from 'beets-shared';
 import { nanoid } from 'nanoid';
 import { Observable, Subject, Subscription } from 'rxjs';
+import * as chalk from 'chalk/index';
 
 export class SocketWrapper extends Observable<CommunicationMessage> {
 
@@ -11,6 +12,8 @@ export class SocketWrapper extends Observable<CommunicationMessage> {
   private readonly errorHandler: any;
   private readonly closeHandler: any;
 
+  name?: string;
+
   constructor(private socket: WebSocket) {
     super(subscriber => {
       // It does actually return Subscription
@@ -19,13 +22,18 @@ export class SocketWrapper extends Observable<CommunicationMessage> {
       return () => subscription.unsubscribe();
     });
     this.id = nanoid(8);
+    this.log('Connected');
     this.messageHandler = (messageEvent: MessageEvent) => {
-      this.subject.next(JSON.parse(messageEvent.data));
+      let message: CommunicationMessage = JSON.parse(messageEvent.data);
+      this.log(`> ${message.type}`)
+      this.subject.next(message);
     };
     this.errorHandler = (errorEvent: any) => {
+      this.log(`> ERROR ${errorEvent}`)
       this.subject.error(errorEvent);
     };
     this.closeHandler = () => {
+      this.log(`Connection closed`)
       this.subject.complete();
       this.handleClose();
     };
@@ -39,10 +47,12 @@ export class SocketWrapper extends Observable<CommunicationMessage> {
   }
 
   log(message: string) {
-    console.log(`[${this.id}] ${message}`);
+    const sourceName = this.name == null ? this.id  : `${this.id}: ${this.name}`
+    console.log(`[${chalk.bold(sourceName)}] ${message}`);
   }
 
   send(message: CommunicationMessage) {
+    this.log(`< ${message.type}`)
     this.socket.send(JSON.stringify(message));
   }
 

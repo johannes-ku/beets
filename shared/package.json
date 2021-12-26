@@ -2,7 +2,7 @@
   "name": "beets-shared",
   "version": "0.0.0",
   "main": "dist/out-tsc/index.js",
-  "types": "dist/out-tsc/**/*.ts",
+  "types": "dist/out-tsc/index.d.ts",
   "private": true,
   "dependencies": {
     "tslib": "1.10.0"

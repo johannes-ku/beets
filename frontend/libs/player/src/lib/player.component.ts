@@ -3,12 +3,17 @@ import { PlayerServiceView } from './player-service-view';
 import { Subject } from 'rxjs';
 import { PlayerService } from './player.service';
 import { PlayerCommand, PlayerCommandType } from './command';
+import {
+  createPlayerEventBuffering,
+  createPlayerEventEnded,
+  createPlayerEventPaused,
+  createPlayerEventStarted
+} from './event';
 
 @Component({
   selector: 'beets-player',
   template: `
     <p>
-      player works!
       <youtube-player [videoId]="dummyVideoId"
                       (ready)="youtubePlayerReady($event)"
                       (change)="youtubePlayerEvent($event)">
@@ -52,8 +57,21 @@ export class PlayerComponent implements OnInit, OnDestroy, PlayerServiceView {
     this.youtubePlayer = player;
   }
 
-  youtubePlayerEvent(event: YT.PlayerEvent) {
-    console.log(event);
+  youtubePlayerEvent(event: YT.OnStateChangeEvent) {
+    switch (event.data) {
+      case YT.PlayerState.PLAYING:
+        this.playerService.handleEvent(createPlayerEventStarted());
+        break;
+      case YT.PlayerState.PAUSED:
+        this.playerService.handleEvent(createPlayerEventPaused(this.youtubePlayer.getCurrentTime()));
+        break;
+      case YT.PlayerState.ENDED:
+        this.playerService.handleEvent(createPlayerEventEnded());
+        break;
+      case YT.PlayerState.BUFFERING:
+        this.playerService.handleEvent(createPlayerEventBuffering(this.youtubePlayer.getCurrentTime()));
+        break;
+    }
   }
 
 }

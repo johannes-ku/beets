@@ -1,5 +1,6 @@
 export enum PlayingStateType {
   Playing = 'Playing',
+  PlayingButActuallyNot = 'PlayingButActuallyNot',
   Paused = 'Paused'
 }
 
