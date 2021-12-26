@@ -1,18 +1,26 @@
+import { PlayerState, TrackSource } from './player-state';
+
 export enum CommunicationMessageType {
   Play = 'Play',
   Pause = 'Pause',
+  Next = 'Next',
   IdentifyAsPlayer = 'IdentifyAsPlayer',
   IdentifyAsUser = 'IdentifyAsUser',
+  PlayerState = 'PlayerState',
+  AddTrack = 'AddTrack'
 }
 
 export type CommunicationMessage =
     CommunicationMessagePlay |
     CommunicationMessagePause |
+    CommunicationMessageNext |
     CommunicationMessageIdentifyAsPlayer |
-    CommunicationMessageIdentifyAsUser;
+    CommunicationMessageIdentifyAsUser |
+    CommunicationMessagePlayerState |
+    CommunicationMessageAddTrack;
 
 export interface CommunicationMessagePlay {
-  type: CommunicationMessageType.Play;
+  readonly type: CommunicationMessageType.Play;
 }
 
 export function createCommunicationMessagePlay(): CommunicationMessagePlay {
@@ -22,7 +30,7 @@ export function createCommunicationMessagePlay(): CommunicationMessagePlay {
 }
 
 export interface CommunicationMessagePause {
-  type: CommunicationMessageType.Pause;
+  readonly type: CommunicationMessageType.Pause;
 }
 
 export function createCommunicationMessagePause(): CommunicationMessagePause {
@@ -31,8 +39,18 @@ export function createCommunicationMessagePause(): CommunicationMessagePause {
   };
 }
 
+export interface CommunicationMessageNext {
+  readonly type: CommunicationMessageType.Next;
+}
+
+export function createCommunicationMessageNext(): CommunicationMessageNext {
+  return {
+    type: CommunicationMessageType.Next,
+  };
+}
+
 export interface CommunicationMessageIdentifyAsPlayer {
-  type: CommunicationMessageType.IdentifyAsPlayer;
+  readonly type: CommunicationMessageType.IdentifyAsPlayer;
 }
 
 export function createCommunicationMessageIdentifyAsPlayer(): CommunicationMessageIdentifyAsPlayer {
@@ -42,7 +60,7 @@ export function createCommunicationMessageIdentifyAsPlayer(): CommunicationMessa
 }
 
 export interface CommunicationMessageIdentifyAsUser {
-  type: CommunicationMessageType.IdentifyAsUser;
+  readonly type: CommunicationMessageType.IdentifyAsUser;
   readonly name: string;
 }
 
@@ -52,3 +70,31 @@ export function createCommunicationMessageIdentifyAsUser(name: string): Communic
     name,
   };
 }
+
+export interface CommunicationMessagePlayerState {
+  readonly type: CommunicationMessageType.PlayerState;
+  readonly state: PlayerState;
+}
+
+export function createCommunicationMessagePlayerState(state: PlayerState): CommunicationMessagePlayerState {
+  return {
+    type: CommunicationMessageType.PlayerState,
+    state,
+  };
+}
+
+export interface CommunicationMessageAddTrack {
+  readonly type: CommunicationMessageType.AddTrack;
+  readonly source: TrackSource;
+  readonly code: string;
+}
+
+export function createCommunicationMessageAddTrack(source: TrackSource, code: string): CommunicationMessageAddTrack {
+  return {
+    type: CommunicationMessageType.AddTrack,
+    source,
+    code
+  };
+}
+
+
