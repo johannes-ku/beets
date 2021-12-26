@@ -19,6 +19,7 @@ export class Server {
       const socket = new SocketWrapper(_socket);
       socket.log('Connected');
       socket.subscribe({
+        next: (message: CommunicationMessage) => socket.log(`Message: ${message.type}`),
         error: (error: any) => socket.log(`Error: ${error}`),
         complete: () => socket.log('Connection closed')
       });

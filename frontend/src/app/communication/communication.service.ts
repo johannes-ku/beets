@@ -1,23 +1,39 @@
 import { Injectable } from '@angular/core';
-import { CommunicationMessage, createCommunicationMessageIdentifyAsUser } from 'beets-shared';
+import {
+  CommunicationMessage,
+  createCommunicationMessageIdentifyAsUser,
+  createCommunicationMessageIdentifyAsPlayer
+} from 'beets-shared';
 import { BufferedSubject } from '../util/buffered-subject';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CommunicationService {
+export class CommunicationService extends Observable<CommunicationMessage> {
 
   private readonly url = 'ws://local.beets:4300'; // TODO: config
   private out$ = new BufferedSubject<CommunicationMessage>();
   private socket: WebSocket;
   private identityMessage: CommunicationMessage;
+  private in$ = new Subject<CommunicationMessage>();
 
   constructor() {
+    super(subscriber => {
+      const subscription = this.in$.subscribe(subscriber);
+      return () => subscription.unsubscribe();
+    });
   }
 
   setIdentityAsUser(name: string) {
     this.identityMessage = createCommunicationMessageIdentifyAsUser(name);
+    this.connect();
+  }
+
+  setIdentityAsPlayer() {
+    this.identityMessage = createCommunicationMessageIdentifyAsPlayer();
+    this.connect();
   }
 
   private connect() {
@@ -29,22 +45,24 @@ export class CommunicationService {
     if (this.identityMessage == null) {
       throw new Error('Identity not set');
     }
-    this.socket = new WebSocket(this.url);
-    this.socket.addEventListener('open', () => {
-      this.send(this.identityMessage);
-      this.out$.subscribe({
-        next: (message: CommunicationMessage) => this.send(message)
+    const socket = new WebSocket(this.url);
+    let subscription: Subscription;
+    socket.addEventListener('open', () => {
+      socket.send(JSON.stringify(this.identityMessage));
+      subscription = this.out$.subscribe({
+        next: (message: CommunicationMessage) => socket.send(JSON.stringify(message))
       });
     });
-    this.socket.addEventListener('close', () => {
-      this.send(this.identityMessage);
-      this.out$.subscribe({
-        next: (message: CommunicationMessage) => this.send(message)
-      });
+    socket.addEventListener('message', (messageEvent: MessageEvent) => {
+      this.in$.next(JSON.parse(messageEvent.data));
     });
+    socket.addEventListener('close', () => {
+      if (subscription != null) {
+        subscription.unsubscribe();
+      }
+    });
+    this.socket = socket;
   }
-
-
 
   send(message: CommunicationMessage) {
     this.connect();

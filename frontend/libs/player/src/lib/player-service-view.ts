@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs';
+import { PlayerCommand } from './command';
 
 export interface PlayerServiceView {
 
   events$: Observable<any>;
-  commandHandler: (command: any) => void;
+  commandHandler: (command: PlayerCommand) => void;
 
 }

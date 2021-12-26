@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlayerServiceView } from './player-service-view';
 import { Subject } from 'rxjs';
 import { PlayerService } from './player.service';
+import { PlayerCommand, PlayerCommandType } from './command';
 
 @Component({
   selector: 'beets-player',
@@ -33,8 +34,18 @@ export class PlayerComponent implements OnInit, OnDestroy, PlayerServiceView {
     this.playerService.unregisterView(this);
   }
 
-  commandHandler(command: any): void {
-    this.youtubePlayer.loadVideoById(command);
+  commandHandler(command: PlayerCommand): void {
+    switch (command.type) {
+      case PlayerCommandType.Play:
+        this.youtubePlayer.playVideo();
+        break;
+      case PlayerCommandType.Pause:
+        this.youtubePlayer.pauseVideo();
+        break;
+      case PlayerCommandType.SetTrackYoutube:
+        this.youtubePlayer.loadVideoById(command.code);
+        break;
+    }
   }
 
   youtubePlayerReady(player: YT.Player) {

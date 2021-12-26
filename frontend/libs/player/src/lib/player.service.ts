@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { PlayerServiceView } from './player-service-view';
 import { Subject, Subscription } from 'rxjs';
+import {
+  createPlayerCommandPause,
+  createPlayerCommandPlay,
+  createPlayerCommandSetTrackYoutube,
+  PlayerCommand
+} from './command';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +15,20 @@ export class PlayerService {
 
   private view: PlayerServiceView;
   private viewEventSubscription: Subscription;
-  private command$ = new Subject<any>();
+  private command$ = new Subject<PlayerCommand>();
 
   constructor() { }
 
   setYtTrack(code: string) {
-    this.command$.next(code);
+    this.command$.next(createPlayerCommandSetTrackYoutube(code));
+  }
+
+  play() {
+    this.command$.next(createPlayerCommandPlay());
+  }
+
+  pause() {
+    this.command$.next(createPlayerCommandPause());
   }
 
   registerView(view: PlayerServiceView) {
@@ -38,7 +52,7 @@ export class PlayerService {
   }
 
   private handleEvent(event: any) {
-
+    // TODO
   }
 
 }
