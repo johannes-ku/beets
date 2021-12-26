@@ -5,6 +5,8 @@
   left: 0;
   right: 0;
   z-index: 999999999;
+  box-shadow: 0 0 17px 4px rgba(138,138,138,0.64);
+  border-top: solid 1px #333;
 }
 .track-name {
   text-overflow: ellipsis;
