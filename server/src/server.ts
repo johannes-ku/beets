@@ -105,6 +105,7 @@ export class Server {
     this.userSockets.add(socket);
     // @ts-ignore
     socket.send(createCommunicationMessagePlayerState(this.state));
+    // @ts-ignore
     socket.subscribe({
       next: (message: CommunicationMessage) => {
         switch (message.type) {

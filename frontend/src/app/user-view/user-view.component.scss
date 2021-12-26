@@ -1,0 +1,17 @@
+.player-card {
+  border-radius: 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999999;
+}
+.track-name {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.queue {
+  padding-bottom: 168px;
+}
+

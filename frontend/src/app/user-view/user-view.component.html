@@ -20,7 +20,8 @@
           <div class="media-content">
             <p class="title is-4 is-flex is-align-items-center is-justify-content-space-between">
               <ng-container *ngIf="state.currentTrack != null">
-                <span class="mr-2">{{ state.currentTrack.name }}</span>
+
+                <span class="mr-2 track-name">{{ state.currentTrack.name }}</span>
                 <button (click)="next()" class="button is-link">
                   <fa-icon [icon]="faForward"></fa-icon>
                 </button>
@@ -53,11 +54,12 @@
         </div>
       </div>
     </div>
-    <beets-queue-item *ngFor="let track of state.queue" [track]="track"></beets-queue-item>
-
-    <button (click)="addSong()" class="button is-link">
-      jou
-    </button>
+    <div class="queue">
+      <beets-queue-item *ngFor="let track of state.queue" [track]="track"></beets-queue-item>
+      <button (click)="addSong()" class="button is-link">
+        jou
+      </button>
+    </div>
   </div>
 </ng-container>
 

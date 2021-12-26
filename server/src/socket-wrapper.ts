@@ -2,7 +2,7 @@ import { MessageEvent, WebSocket } from 'ws';
 import { CommunicationMessage } from 'beets-shared';
 import { nanoid } from 'nanoid';
 import { Observable, Subject, Subscription } from 'rxjs';
-import * as chalk from 'chalk/index';
+import * as chalk from 'chalk';
 
 export class SocketWrapper extends Observable<CommunicationMessage> {
 
