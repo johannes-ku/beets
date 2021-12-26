@@ -37,6 +37,7 @@ export class Server {
     this.server.on('listening', () => console.log(`Server listening on port ${port}`));
     this.server.on('connection', (_socket: WebSocket) => {
       const socket = new SocketWrapper(_socket);
+      // @ts-ignore
       const expectIdentificationMessageSubscription: Subscription = socket.subscribe({
         next: (message: CommunicationMessage) => {
           switch (message.type) {
@@ -73,6 +74,7 @@ export class Server {
           this.state.playingTime
       ));
     }
+    // @ts-ignore
     socket.subscribe({
       next: (message: CommunicationMessage) => {
         switch (message.type) {
@@ -100,6 +102,7 @@ export class Server {
 
   private addUserSocket(socket: SocketWrapper) {
     this.userSockets.add(socket);
+    // @ts-ignore
     socket.subscribe({
       next: (message: CommunicationMessage) => {
         switch (message.type) {

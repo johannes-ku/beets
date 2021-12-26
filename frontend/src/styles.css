@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.queue-card {
+  margin: 1em 1em 0 1em;
+}
+
+@media screen and (min-width: 1024px) {
+  .user-view-container {
+    margin-top: 1em;
+  }
+}
+

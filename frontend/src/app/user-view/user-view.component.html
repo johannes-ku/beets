@@ -1,4 +1,40 @@
 <ng-container>
-  <button (click)="play()">Play</button>
-  <button (click)="pause()">Pause</button>
+  <div class="container user-view-container">
+    <div class="card player-card">
+      <div class="card-content">
+        <div class="media is-flex is-align-items-center">
+          <div class="media-left">
+            <figure class="image">
+              <button (click)="play()" class="button is-primary is-large">
+                <fa-icon [icon]="faPlay"></fa-icon>
+              </button>
+              <button (click)="pause()" class="is-hidden button is-danger is-large">
+                <fa-icon [icon]="faPause"></fa-icon>
+              </button>
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4 is-flex is-align-items-center is-justify-content-space-between">
+              <span class="mr-2">Taking Hobbits to Isengard - 10 HOURS</span>
+              <button (click)="pause()" class="button is-link">
+                <fa-icon [icon]="faForward"></fa-icon>
+              </button>
+            </p>
+
+          </div>
+        </div>
+
+        <div class="content">
+          <progress class="progress is-small is-marginless" value="24352" max="36002"></progress>
+          <p>
+            <span>405:52</span>
+            <span class="is-pulled-right">600:02</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <beets-queue-item [track]="exampleTrack"></beets-queue-item>
+
+
+  </div>
 </ng-container>
