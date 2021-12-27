@@ -11,8 +11,8 @@
         <div class="subtitle is-7">
           <fa-icon [icon]="faYoutube" class="mr-2 is-pulled-left"></fa-icon>
           <div class="is-flex is-align-items-center is-justify-content-space-between">
-            <p class="is-marginless"><strong>Added by: </strong>Homer</p>
-            <p><strong>Length: </strong>{{ getTrackLengthPretty() }}</p>
+            <p class="is-marginless"><strong>Added by: </strong>{{ track.queuedBy }}</p>
+            <p><strong>Length: </strong>{{ track.length | formatSeconds }}</p>
           </div>
         </div>
       </div>

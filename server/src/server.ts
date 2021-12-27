@@ -10,16 +10,25 @@ import {
   createCommunicationMessageSetPlayerTrack,
   createPlayerState,
   createTrack,
-  PlayingStateType
+  PlayingStateType,
+  Track,
+  TrackSource
 } from 'beets-shared';
 import { Subscription } from 'rxjs';
 import { SocketWrapper } from './socket-wrapper';
 import { nanoid } from 'nanoid';
+import { google, youtube_v3 } from 'googleapis';
+import { duration } from 'moment';
 
 export class Server {
 
   private readonly server: WebSocketServer;
   private readonly userSockets: Set<SocketWrapper> = new Set<SocketWrapper>();
+  private readonly youtubeApi: youtube_v3.Youtube = google.youtube({
+    version: 'v3',
+    auth: 'AIzaSyATchqdMwCq_oqoUVjo_05iu5HaEH5f-hA' // TODO config
+  });
+
   private state = createPlayerState(
       PlayingStateType.Playing,
       0,
@@ -119,7 +128,7 @@ export class Server {
             this.handleNext();
             break;
           case CommunicationMessageType.AddTrack:
-            this.handleAddTrack(message);
+            this.handleAddTrack(message, socket);
             break;
           default:
             socket.log(`Unexpected message ${message.type}`);
@@ -153,15 +162,8 @@ export class Server {
     this.stateUpdated();
   }
 
-  private handleAddTrack(message: CommunicationMessageAddTrack) {
-    // TODO: Track props
-    const track = createTrack(
-        nanoid(8),
-        message.code + ' Goat Song by Garry the Goat',
-        61,
-        message.source,
-        message.code
-    );
+  private async handleAddTrack(message: CommunicationMessageAddTrack, socket: SocketWrapper) {
+    const track = await this.createYoutubeTrack(message.code, socket.name!);
     this.state.queue.push(track);
     if (this.state.currentTrack == null) {
       this.nextTrack();
@@ -224,6 +226,27 @@ export class Server {
     this.userSockets.forEach((socket: SocketWrapper) => {
       socket.send(message);
     });
+  }
+
+  private async createYoutubeTrack(code: string, queuedBy: string): Promise<Track> {
+    const videoInfoResponse = await this.youtubeApi.videos.list({
+      id: [code],
+      part: ['snippet', 'contentDetails']
+    });
+    const videoInfo = videoInfoResponse.data.items![0];
+    const snippet = videoInfo.snippet!;
+    const contentDetails = videoInfo.contentDetails!;
+    if (contentDetails == null) {
+      throw new Error('Content details empty');
+    }
+    return createTrack(
+        nanoid(16),
+        snippet.title!,
+        duration(videoInfo.contentDetails!.duration).asSeconds(),
+        TrackSource.Youtube,
+        code,
+        queuedBy
+    );
   }
 
 }

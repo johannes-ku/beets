@@ -5,7 +5,7 @@ export enum PlayingStateType {
 }
 
 export enum TrackSource {
-  YouTube = 'YouTube'
+  Youtube = 'Youtube'
 }
 
 export interface Track {
@@ -14,15 +14,24 @@ export interface Track {
   length: number;
   source: TrackSource;
   code: string;
+  queuedBy: string;
 }
 
-export function createTrack(id: string, name: string, length: number, source: TrackSource, code: string): Track {
+export function createTrack(
+    id: string,
+    name: string,
+    length: number,
+    source: TrackSource,
+    code: string,
+    queuedBy: string
+): Track {
   return {
     id,
     name,
     length,
     source,
-    code
+    code,
+    queuedBy
   };
 }
 
