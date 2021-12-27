@@ -1,4 +1,55 @@
 <div class="has-stuff-in-center has-text-centered">
   <qr-code [value]="getUrl()" background="transparent" foreground="white" size="512"></qr-code>
   <h1 class="title is-huge has-text-white mt-4">{{ getUrl() }}</h1>
+  <div class="card player-card">
+    <div class="card-content p-4">
+      <div class="media is-flex is-align-items-center mb-3">
+        <div class="media-left">
+          <figure class="image">
+            <button *ngIf="state.playingStateType === PlayingStateType.Paused && state.currentTrack != null"
+                    (click)="play()"
+                    class="button is-primary is-large">
+              <fa-icon [icon]="faPlay"></fa-icon>
+            </button>
+            <button *ngIf="state.playingStateType !== PlayingStateType.Paused && state.currentTrack != null"
+                    (click)="pause()"
+                    class="button is-danger is-large">
+              <fa-icon [icon]="faPause"></fa-icon>
+            </button>
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-3 is-flex is-align-items-center is-justify-content-space-between">
+            <ng-container *ngIf="state.currentTrack != null">
+
+              <span class="mr-4 track-name">{{ state.currentTrack.name }}</span>
+              <button (click)="next()" class="button is-link">
+                <fa-icon [icon]="faForward"></fa-icon>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="state.currentTrack == null">
+              <span>Waiting for songs...</span>
+            </ng-container>
+          </p>
+
+        </div>
+      </div>
+
+      <div class="content">
+        <ng-container *ngIf="state.currentTrack != null">
+          <progress class="progress is-marginless"
+                    [value]="state.playingTime"
+                    [max]="state.currentTrack.length"></progress>
+          <div class="is-flex is-justify-content-space-between">
+            <p class="is-size-5 is-marginless">{{ state.playingTime | formatSeconds }}</p>
+            <p class="is-size-5 is-marginless">{{ state.currentTrack.length | formatSeconds }}</p>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="state.currentTrack == null">
+          <progress class="progress is-marginless" max="0"></progress>
+          <p class="is-size-5 is-marginless has-text-centered">{{ name }}</p>
+        </ng-container>
+      </div>
+    </div>
+  </div>
 </div>

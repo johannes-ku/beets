@@ -30,6 +30,7 @@ export class UserViewComponent implements OnInit, OnDestroy {
   readonly faSearch = faSearch;
   readonly faYoutube = faYoutube;
   readonly PlayingStateType = PlayingStateType;
+  readonly TrackSource = TrackSource;
 
   private readonly componentDestroyed$ = new Subject();
   private playerTimeUpdatingIntervalId: any;
