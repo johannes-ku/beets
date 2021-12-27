@@ -30,22 +30,22 @@ export class UserViewComponent implements OnInit, OnDestroy {
   readonly faSearch = faSearch;
   readonly faYoutube = faYoutube;
   readonly PlayingStateType = PlayingStateType;
-  readonly name = this.getName();
 
   private readonly componentDestroyed$ = new Subject();
   private playerTimeUpdatingIntervalId: any;
 
   state: PlayerState;
+  name: string;
 
   constructor(private communicationService: CommunicationService) { }
 
   ngOnInit() {
-    let name = localStorage.getItem('name');
-    if (name == null) {
-      name = 'Dr. Krieger';
-      localStorage.setItem('name', name);
+    this.name = localStorage.getItem('name');
+    if (this.name == null) {
+      this.name = this.getRandomName();
+      localStorage.setItem('name', this.name);
     }
-    this.communicationService.setIdentityAsUser(name);
+    this.communicationService.setIdentityAsUser(this.name);
     this.communicationService
         .pipe(takeUntil(this.componentDestroyed$))
         .subscribe({
@@ -109,6 +109,31 @@ export class UserViewComponent implements OnInit, OnDestroy {
   getName() {
     const name = localStorage.getItem('name');
     return name == null ? 'N/A' : name;
+  }
+
+  getRandomFromList(list) {
+    return list[Math.floor((Math.random() * list.length))];
+  }
+
+  getRandomName() {
+    const adj = ['White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Cyan', 'Violet', 'Brown', 'Black', 'Gray',
+      'Grey', 'Fierce', 'Angry', 'Depressed', 'Annoying', 'Large', 'Lorge', 'Small', 'Smol', 'Big', 'Thicc', 'Thick',
+      'Alarming', 'Yelling', 'Medium', 'Medium-rare', 'Rare', 'Common', 'Uncommon', 'Shaky', 'Bouncy', 'Quick', 'Swift',
+      'Slow', 'Dark', 'Light', 'Superb', 'Digital', 'Analog', 'Weird', 'Tight', 'Western', 'Eastern', 'Northern',
+      'Southern', 'British', 'Polish', 'Finnish', 'Swedish', 'Latvian', 'Lithuanian', 'Italian', 'Stunning', 'Wobbly',
+      'Flashy', 'Disorderly', 'Orderly', 'Quirky', 'Snappy', 'Knobby', 'Cool', 'Uncool', 'Strong', 'Weak', 'Stronk',
+      'Arid', 'Temperate', 'Snowy', 'Sunny', 'Rainy', 'Watery', 'Moist', 'Wet', 'Dry'
+    ];
+    const noun = ['Joonas', 'Rasmus', 'Morris', 'Maq', 'Maku', 'Maku220', 'Hint', 'Soone', 'Oss', 'Ossu', 'Oskar',
+      'BBQ', 'Barbeque', 'Boy', 'Boi', 'Grill', 'Bol', 'Ball', 'Dog', 'Doggo', 'Husky', 'Maliraptor', 'Retriever',
+      'Whippet', 'Hound', 'Malamute', 'Terrier', 'Spaniel', 'Beagle', 'Collie', 'Boxer', 'Puppy', 'Pupper', 'Pupperino',
+      'Cat', 'Catto', 'Avocato', 'Avocado', 'Penguin', 'Bird', 'Birb', 'Drone', 'Fish', 'Dolphin', 'Shark', 'Shrek',
+      'Donkey', 'Dragon', 'Mr. Burns', 'Homer', 'Marge', 'Lisa', 'Bart', 'Maggie', 'Moe', 'Peter', 'Louis', 'Meg',
+      'Stewie', 'Brian', 'Dude', 'Rapper', 'Wrapper', 'Orange', 'Steve', 'Rock', 'Stone', 'Brick', 'Toad', 'Frog',
+      'Tiger', 'Tigger', 'Pooh', 'Tigr', 'Blackhawk', 'Warthog', 'Bear', 'Beer', 'Redditor', 'Apache', 'Huey',
+      'Predator', 'Reaper', 'Puma', 'Karen'
+    ];
+    return this.getRandomFromList(adj) + ' ' + this.getRandomFromList(noun);
   }
 
 }
