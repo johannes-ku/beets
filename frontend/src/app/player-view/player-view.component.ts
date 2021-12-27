@@ -38,7 +38,11 @@ export class PlayerViewComponent implements OnInit, OnDestroy {
                 this.playerService.pause();
                 break;
               case CommunicationMessageType.SetPlayerTrack:
-                this.playerService.setYtTrack(message.code);
+                if (message.source == null) {
+                  this.playerService.stop();
+                } else {
+                  this.playerService.setTrack(message.source, message.code, message.startTime);
+                }
                 break;
               default:
                 console.log(`Unexpected message ${message.type}`);

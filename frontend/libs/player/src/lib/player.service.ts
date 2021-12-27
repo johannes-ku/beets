@@ -1,64 +1,78 @@
 import { Injectable } from '@angular/core';
-import { PlayerServiceView } from './player-service-view';
-import { Observable, Subject, Subscription } from 'rxjs';
-import {
-  createPlayerCommandPause,
-  createPlayerCommandPlay,
-  createPlayerCommandSetTrackYoutube,
-  PlayerCommand
-} from './command';
+import { Observable, Subject } from 'rxjs';
 import { PlayerEvent } from './event';
+import { YoutubePlayerService } from './youtube-player/youtube-player.service';
+import { TrackSource } from 'beets-shared';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService extends Observable<PlayerEvent> {
 
-  private view: PlayerServiceView;
-  private viewEventSubscription: Subscription;
-  private commands$ = new Subject<PlayerCommand>();
   private events$ = new Subject<PlayerEvent>();
+  private activeSource?: TrackSource;
+  private shouldBePlaying = true;
 
-  constructor() {
+  constructor(private youtubePlayerService: YoutubePlayerService) {
     super(subscriber => {
       const subscription = this.events$.subscribe(subscriber);
       return () => subscription.unsubscribe();
     });
+    this.youtubePlayerService.subscribe({
+      next: playerEvent => {
+        if (this.activeSource !== TrackSource.Youtube) {
+          return;
+        }
+        this.events$.next(playerEvent);
+      }
+    });
   }
-  setYtTrack(code: string) {
-    this.commands$.next(createPlayerCommandSetTrackYoutube(code));
+
+  setTrack(source: TrackSource, code: string, startTime: number) {
+    switch (this.activeSource) {
+      case TrackSource.Youtube:
+        this.youtubePlayerService.pause();
+        break;
+    }
+    switch (source) {
+      case TrackSource.Youtube:
+        this.youtubePlayerService.setTrack(code, startTime);
+        if (this.shouldBePlaying) {
+          this.youtubePlayerService.play();
+        } else {
+          this.youtubePlayerService.pause();
+        }
+        break;
+    }
+    this.activeSource = source;
   }
 
   play() {
-    this.commands$.next(createPlayerCommandPlay());
+    this.shouldBePlaying = true;
+    switch (this.activeSource) {
+      case TrackSource.Youtube:
+        this.youtubePlayerService.play();
+        break;
+    }
   }
 
   pause() {
-    this.commands$.next(createPlayerCommandPause());
-  }
-
-  registerView(view: PlayerServiceView) {
-    if (this.view != null) {
-      throw new Error('View already registered');
+    this.shouldBePlaying = false;
+    switch (this.activeSource) {
+      case TrackSource.Youtube:
+        this.youtubePlayerService.pause();
+        break;
     }
-    this.view = view;
-    this.viewEventSubscription = view.events$.subscribe((event: any) => this.handleEvent(event));
-    this.commands$.subscribe((command: any) => view.commandHandler(command));
   }
 
-  unregisterView(view: PlayerServiceView) {
-    if (this.view == null || this.view !== view) {
-      throw new Error('View not registered');
+  stop() {
+    this.shouldBePlaying = false;
+    switch (this.activeSource) {
+      case TrackSource.Youtube:
+        this.youtubePlayerService.pause();
+        break;
     }
-    this.view = null;
-    this.viewEventSubscription.unsubscribe();
-    this.viewEventSubscription = null;
-    this.commands$.complete();
-    this.commands$ = new Subject<any>();
-  }
-
-  handleEvent(event: PlayerEvent) {
-    this.events$.next(event);
+    this.activeSource = null;
   }
 
 }

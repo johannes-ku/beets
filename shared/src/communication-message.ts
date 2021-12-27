@@ -105,14 +105,14 @@ export function createCommunicationMessageAddTrack(source: TrackSource, code: st
 
 export interface CommunicationMessageSetPlayerTrack {
   readonly type: CommunicationMessageType.SetPlayerTrack;
-  readonly source: TrackSource;
-  readonly code: string;
+  readonly source?: TrackSource;
+  readonly code?: string;
   readonly startTime: number;
 }
 
 export function createCommunicationMessageSetPlayerTrack(
-    source: TrackSource,
-    code: string,
+    source: TrackSource | undefined,
+    code: string | undefined,
     startTime: number,
 ): CommunicationMessageSetPlayerTrack {
   return {
