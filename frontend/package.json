@@ -23,6 +23,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "angular2-qrcode": "^2.0.3",
     "beets-shared": "file:../shared",
     "ngx-youtube-player": "12.0.1",
     "rxjs": "~6.4.0",

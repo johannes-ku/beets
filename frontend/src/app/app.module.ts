@@ -12,6 +12,8 @@ import { FormatSecondsPipe } from './format-seconds/format-seconds.pipe';
 import { SongSearchComponent } from './user-view/song-search/song-search.component';
 import { SearchResultComponent } from './user-view/song-search/search-result/search-result.component';
 import { FormsModule } from '@angular/forms';
+import { AdvertiseViewComponent } from './advertise-view/advertise-view.component';
+import { QRCodeModule } from 'angular2-qrcode';
 
 @NgModule({
   declarations: [
@@ -21,14 +23,16 @@ import { FormsModule } from '@angular/forms';
     QueueItemComponent,
     FormatSecondsPipe,
     SongSearchComponent,
-    SearchResultComponent
+    SearchResultComponent,
+    AdvertiseViewComponent
   ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         PlayerModule,
         FontAwesomeModule,
-        FormsModule
+        FormsModule,
+        QRCodeModule
     ],
   providers: [],
   bootstrap: [AppComponent]
