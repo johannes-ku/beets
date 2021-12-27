@@ -1,0 +1,19 @@
+<div class="search-modal p-4">
+  <div class="card">
+    <div class="card-content p-4">
+      <div class="content">
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" type="text" placeholder="Song name" [(ngModel)]="searchPhrase" (ngModelChange)="search()">
+          </div>
+          <div class="control">
+            <a class="button is-primary">
+              <fa-icon [icon]="faSearch"></fa-icon>
+            </a>
+          </div>
+        </div>
+        <beets-search-result *ngFor="let result for lastResults"></beets-search-result>
+      </div>
+    </div>
+  </div>
+</div>

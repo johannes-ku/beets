@@ -11,7 +11,8 @@ import {
   PlayingStateType,
   TrackSource
 } from 'beets-shared';
-import { faForward, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faForward, faPause, faPlay, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -25,7 +26,11 @@ export class UserViewComponent implements OnInit, OnDestroy {
   readonly faPlay = faPlay;
   readonly faPause = faPause;
   readonly faForward = faForward;
+  readonly faPlus = faPlus;
+  readonly faSearch = faSearch;
+  readonly faYoutube = faYoutube;
   readonly PlayingStateType = PlayingStateType;
+  readonly name = this.getName();
 
   private readonly componentDestroyed$ = new Subject();
   private playerTimeUpdatingIntervalId: any;
@@ -99,6 +104,11 @@ export class UserViewComponent implements OnInit, OnDestroy {
     ];
     const code = codes[Math.floor(Math.random() * codes.length)];
     this.communicationService.send(createCommunicationMessageAddTrack(TrackSource.Youtube, code));
+  }
+
+  getName() {
+    const name = localStorage.getItem('name');
+    return name == null ? 'N/A' : name;
   }
 
 }

@@ -4,7 +4,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 999999999;
+  z-index: 99999999;
   box-shadow: 0 0 17px 4px rgba(138,138,138,0.64);
   border-top: solid 1px #333;
 }
@@ -15,5 +15,8 @@
 }
 .queue {
   padding-bottom: 114px;
+}
+.user-view-container.modal-open {
+  overflow: hidden;
 }
 

@@ -5,12 +5,12 @@
         <div class="media is-flex is-align-items-center mb-3">
           <div class="media-left">
             <figure class="image">
-              <button *ngIf="state.playingStateType === PlayingStateType.Paused"
+              <button *ngIf="state.playingStateType === PlayingStateType.Paused && state.currentTrack != null"
                       (click)="play()"
                       class="button is-primary">
                 <fa-icon [icon]="faPlay"></fa-icon>
               </button>
-              <button *ngIf="state.playingStateType !== PlayingStateType.Paused"
+              <button *ngIf="state.playingStateType !== PlayingStateType.Paused && state.currentTrack != null"
                       (click)="pause()"
                       class="button is-danger">
                 <fa-icon [icon]="faPause"></fa-icon>
@@ -27,7 +27,7 @@
                 </button>
               </ng-container>
               <ng-container *ngIf="state.currentTrack == null">
-                @Joh kui currentTrack on null
+                <span>Waiting for songs...</span>
               </ng-container>
             </p>
 
@@ -41,28 +41,43 @@
                       [max]="state.currentTrack.length"></progress>
             <div class="is-flex is-justify-content-space-between">
               <p class="is-size-7 is-marginless">{{ state.playingTime | formatSeconds }}</p>
+              <p class="is-size-7 is-marginless">{{ name }}</p>
               <p class="is-size-7 is-marginless">{{ state.currentTrack.length | formatSeconds }}</p>
             </div>
           </ng-container>
           <ng-container *ngIf="state.currentTrack == null">
-            <progress class="progress is-small is-marginless" value="0" max="0"></progress>
-            <p>
-              <span>{{ 0 | formatSeconds }}</span>
-              <span class="is-pulled-right">{{ 0 | formatSeconds }}</span>
-            </p>
+            <progress class="progress is-small is-marginless" max="0"></progress>
+            <p class="is-size-7 is-marginless has-text-centered">{{ name }}</p>
           </ng-container>
         </div>
       </div>
     </div>
     <div class="queue">
       <beets-queue-item *ngFor="let track of state.queue" [track]="track"></beets-queue-item>
-      <button (click)="addSong()" class="button is-link">
-        jou
-      </button>
+      <div class="has-text-centered m-2">
+        <button (click)="addSong()" class="button is-success is-large">
+          <fa-icon [icon]="faPlus" class="pr-2"></fa-icon>
+          Queue song
+        </button>
+      </div>
     </div>
   </div>
+  <beets-song-search></beets-song-search>
 </ng-container>
 
 <ng-template #loading>
-  @JOh tee siia mingi asi
+  <pre style="font-family: monospace;">
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣉⡥⠶⢶⣿⣿⣿⣿⣷⣆⠉⠛⠿⣿⣿⣿⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⡿⢡⡞⠁⠀⠀⠤⠈⠿⠿⠿⠿⣿⠀⢻⣦⡈⠻⣿⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⡇⠘⡁⠀⢀⣀⣀⣀⣈⣁⣐⡒⠢⢤⡈⠛⢿⡄⠻⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⡇⠀⢀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠉⠐⠄⡈⢀⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⠇⢠⣿⣿⣿⣿⡿⢿⣿⣿⣿⠁⢈⣿⡄⠀⢀⣀⠸⣿⣿⣿⣿
+  ⣿⣿⣿⣿⡿⠟⣡⣶⣶⣬⣭⣥⣴⠀⣾⣿⣿⣿⣶⣾⣿⣧⠀⣼⣿⣷⣌⡻⢿⣿
+  ⣿⣿⠟⣋⣴⣾⣿⣿⣿⣿⣿⣿⣿⡇⢿⣿⣿⣿⣿⣿⣿⡿⢸⣿⣿⣿⣿⣷⠄⢻
+  ⡏⠰⢾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⢂⣭⣿⣿⣿⣿⣿⠇⠘⠛⠛⢉⣉⣠⣴⣾
+  ⣿⣷⣦⣬⣍⣉⣉⣛⣛⣉⠉⣤⣶⣾⣿⣿⣿⣿⣿⣿⡿⢰⣿⣿⣿⣿⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡘⣿⣿⣿⣿⣿⣿⣿⣿⡇⣼⣿⣿⣿⣿⣿⣿⣿⣿
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⢸⣿⣿⣿⣿⣿⣿⣿⠁⣿⣿⣿⣿⣿⣿⣿⣿⣿
+  </pre>
 </ng-template>

@@ -9,6 +9,9 @@ import { UserViewComponent } from './user-view/user-view.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QueueItemComponent } from './user-view/queue-item/queue-item.component';
 import { FormatSecondsPipe } from './format-seconds/format-seconds.pipe';
+import { SongSearchComponent } from './user-view/song-search/song-search.component';
+import { SearchResultComponent } from './user-view/song-search/search-result/search-result.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,14 +19,17 @@ import { FormatSecondsPipe } from './format-seconds/format-seconds.pipe';
     PlayerViewComponent,
     UserViewComponent,
     QueueItemComponent,
-    FormatSecondsPipe
+    FormatSecondsPipe,
+    SongSearchComponent,
+    SearchResultComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    PlayerModule,
-    FontAwesomeModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        PlayerModule,
+        FontAwesomeModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
