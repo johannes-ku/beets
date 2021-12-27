@@ -7,10 +7,9 @@ import {
   createCommunicationMessageNext,
   createCommunicationMessagePause,
   createCommunicationMessagePlay,
-  createTrack,
   PlayerState,
-  TrackSource,
-  PlayingStateType
+  PlayingStateType,
+  TrackSource
 } from 'beets-shared';
 import { faForward, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
@@ -99,7 +98,7 @@ export class UserViewComponent implements OnInit, OnDestroy {
       'ZOhnPIHGxNM'
     ];
     const code = codes[Math.floor(Math.random() * codes.length)];
-    this.communicationService.send(createCommunicationMessageAddTrack(TrackSource.YouTube, code));
+    this.communicationService.send(createCommunicationMessageAddTrack(TrackSource.Youtube, code));
   }
 
 }

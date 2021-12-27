@@ -11,6 +11,8 @@
   "dependencies": {
     "beets-shared": "file:../shared",
     "chalk": "4.1.2",
+    "googleapis": "92.0.0",
+    "moment": "2.29.1",
     "nanoid": "3.1.30",
     "rxjs": "7.4.0",
     "tslib": "1.10.0",
@@ -19,6 +21,6 @@
   "devDependencies": {
     "@types/node": "17.0.4",
     "ts-node": "10.4.0",
-    "typescript": "3.5.3"
+    "typescript": "3.7.7"
   }
 }
