@@ -11,7 +11,7 @@ import { QueueItemComponent } from './user-view/queue-item/queue-item.component'
 import { FormatSecondsPipe } from './format-seconds/format-seconds.pipe';
 import { SongSearchComponent } from './user-view/song-search/song-search.component';
 import { SearchResultComponent } from './user-view/song-search/search-result/search-result.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdvertiseViewComponent } from './advertise-view/advertise-view.component';
 import { QRCodeModule } from 'angular2-qrcode';
 
@@ -26,14 +26,15 @@ import { QRCodeModule } from 'angular2-qrcode';
     SearchResultComponent,
     AdvertiseViewComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        PlayerModule,
-        FontAwesomeModule,
-        FormsModule,
-        QRCodeModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    PlayerModule,
+    FontAwesomeModule,
+    FormsModule,
+    QRCodeModule,
+    ReactiveFormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

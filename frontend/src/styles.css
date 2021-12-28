@@ -37,3 +37,7 @@ beets-advertise-view {
     background-position: 0 50%;
   }
 }
+
+.has-flex-gap-1 {
+  gap: 0.75rem;
+}

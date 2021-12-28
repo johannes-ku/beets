@@ -31,7 +31,9 @@ export class PlayerService extends Observable<PlayerEvent> {
   setTrack(source: TrackSource, code: string, startTime: number) {
     switch (this.activeSource) {
       case TrackSource.Youtube:
-        this.youtubePlayerService.pause();
+        if (source !== TrackSource.Youtube) {
+          this.youtubePlayerService.pause();
+        }
         break;
     }
     switch (source) {
@@ -66,7 +68,6 @@ export class PlayerService extends Observable<PlayerEvent> {
   }
 
   stop() {
-    this.shouldBePlaying = false;
     switch (this.activeSource) {
       case TrackSource.Youtube:
         this.youtubePlayerService.pause();

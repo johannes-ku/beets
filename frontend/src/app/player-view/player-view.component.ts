@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CommunicationMessage,
   CommunicationMessageType,
-  createCommunicationMessagePlaying,
-  createCommunicationMessagePaused,
   createCommunicationMessageNext,
+  createCommunicationMessagePaused,
+  createCommunicationMessagePlaying,
 } from 'beets-shared';
 import { PlayerService } from '../../../libs/player/src/lib/player.service';
 import { CommunicationService } from '../communication/communication.service';

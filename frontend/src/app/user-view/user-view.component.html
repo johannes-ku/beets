@@ -55,14 +55,14 @@
     <div class="queue">
       <beets-queue-item *ngFor="let track of state.queue" [track]="track"></beets-queue-item>
       <div class="has-text-centered m-2">
-        <button (click)="addSong()" class="button is-success is-large">
+        <button (click)="openSearch()" class="button is-success is-large">
           <fa-icon [icon]="faPlus" class="pr-2"></fa-icon>
           Queue song
         </button>
       </div>
     </div>
   </div>
-  <beets-song-search></beets-song-search>
+  <beets-song-search *ngIf="searchOpen" (closeModal)="closeSearch()"></beets-song-search>
 </ng-container>
 
 <ng-template #loading>

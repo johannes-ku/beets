@@ -2,17 +2,27 @@
   <div class="card">
     <div class="card-content p-4">
       <div class="content">
-        <div class="field has-addons">
-          <div class="control is-expanded">
-            <input class="input" type="text" placeholder="Song name" [(ngModel)]="searchPhrase" (ngModelChange)="search()">
+        <div class="is-flex has-flex-gap-1">
+          <div class="field has-addons is-flex-grow-1">
+            <div class="control is-expanded">
+              <input class="input" type="text" placeholder="Song name"
+                     [formControl]="searchPhrase">
+            </div>
           </div>
-          <div class="control">
-            <a class="button is-primary">
-              <fa-icon [icon]="faSearch"></fa-icon>
-            </a>
+          <div class="buttons mb-1">
+            <div class="button is-danger" (click)="closeModal.emit()">
+              <fa-icon [icon]="faTimes"></fa-icon>
+            </div>
           </div>
         </div>
-        <beets-search-result></beets-search-result>
+        <ng-container *ngIf="activeViewState === ViewState.Searching">
+          <progress class="progress is-small is-primary" max="100"></progress>
+        </ng-container>
+        <ng-container *ngIf="activeViewState === ViewState.ShowResults">
+          <beets-search-result *ngFor="let searchResult of searchResults.results"
+                               [searchResult]="searchResult"
+                               (addTrack)="addTrack($event)"></beets-search-result>
+        </ng-container>
       </div>
     </div>
   </div>

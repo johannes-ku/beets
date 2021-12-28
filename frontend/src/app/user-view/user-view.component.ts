@@ -3,7 +3,6 @@ import { CommunicationService } from '../communication/communication.service';
 import {
   CommunicationMessage,
   CommunicationMessageType,
-  createCommunicationMessageAddTrack,
   createCommunicationMessageNext,
   createCommunicationMessagePause,
   createCommunicationMessagePlay,
@@ -27,13 +26,13 @@ export class UserViewComponent implements OnInit, OnDestroy {
   readonly faPause = faPause;
   readonly faForward = faForward;
   readonly faPlus = faPlus;
-  readonly faSearch = faSearch;
   readonly faYoutube = faYoutube;
   readonly PlayingStateType = PlayingStateType;
-  readonly TrackSource = TrackSource;
 
   private readonly componentDestroyed$ = new Subject();
   private playerTimeUpdatingIntervalId: any;
+
+  searchOpen = false;
 
   state: PlayerState;
   name: string;
@@ -97,16 +96,6 @@ export class UserViewComponent implements OnInit, OnDestroy {
     this.communicationService.send(createCommunicationMessageNext());
   }
 
-  addSong() {
-    const codes = [
-      'S4vFO8W18gM',
-      'fT3wwNaEr4g',
-      'ZOhnPIHGxNM'
-    ];
-    const code = codes[Math.floor(Math.random() * codes.length)];
-    this.communicationService.send(createCommunicationMessageAddTrack(TrackSource.Youtube, code));
-  }
-
   getName() {
     const name = localStorage.getItem('name');
     return name == null ? 'N/A' : name;
@@ -135,6 +124,14 @@ export class UserViewComponent implements OnInit, OnDestroy {
       'Predator', 'Reaper', 'Puma', 'Karen'
     ];
     return this.getRandomFromList(adj) + ' ' + this.getRandomFromList(noun);
+  }
+
+  openSearch() {
+    this.searchOpen = true;
+  }
+
+  closeSearch() {
+    this.searchOpen = false;
   }
 
 }

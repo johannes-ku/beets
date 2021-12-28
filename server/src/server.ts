@@ -188,10 +188,6 @@ export class Server {
 
   private nextTrack() {
     const nextTrack = this.state.queue.shift();
-    if (nextTrack == null) {
-      // TODO Somehow pause player
-      return;
-    }
     this.state.playingTime = 0;
     this.state.currentTrack = nextTrack;
     if (this.state.playingStateType == PlayingStateType.Playing) {
@@ -199,8 +195,8 @@ export class Server {
     }
     if (this.playerSocket != null) {
       this.playerSocket.send(createCommunicationMessageSetPlayerTrack(
-          nextTrack.source,
-          nextTrack.code,
+          nextTrack != null ? nextTrack.source : undefined,
+          nextTrack != null ? nextTrack.code : undefined,
           0,
       ));
     }
@@ -233,7 +229,7 @@ export class Server {
       id: [code],
       part: ['snippet', 'contentDetails']
     });
-    const videoInfo = videoInfoResponse.data.items![0];
+    const videoInfo: youtube_v3.Schema$Video = videoInfoResponse.data.items![0];
     const snippet = videoInfo.snippet!;
     const contentDetails = videoInfo.contentDetails!;
     if (contentDetails == null) {
