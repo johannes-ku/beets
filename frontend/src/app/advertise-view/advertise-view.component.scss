@@ -1,6 +1,21 @@
-html, body {
-  width: 100%;
+:host {
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.advertisement {
+  animation: gradient 15s ease infinite;
+  background: linear-gradient(-65deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
   height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .card {
@@ -12,11 +27,22 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
 }
+
 .player-card {
   border-radius: 0;
-  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 99999999;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
 }

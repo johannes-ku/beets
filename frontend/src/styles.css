@@ -3,41 +3,17 @@ html {
   background-color: #eee;
 }
 
-html, body, beets-root, beets-user-view, .user-view-container {
-  min-height: 100vh;
+html, body {
+  overflow: auto;
 }
 
-beets-root, beets-user-view {
+beets-root {
   display: block;
-}
-
-beets-advertise-view {
-  background: linear-gradient(-65deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-  width: 100vw;
-  height: 100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
 }
 
 .is-huge {
   font-size: 6em;
 }
-
-@keyframes gradient {
-  0% {
-    background-position: 0 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0 50%;
-  }
-}
-
 .has-flex-gap-1 {
   gap: 0.75rem;
 }

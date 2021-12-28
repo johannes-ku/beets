@@ -27,13 +27,10 @@ export class AdvertiseViewComponent implements OnInit, OnDestroy {
   private readonly componentDestroyed$ = new Subject();
   private playerTimeUpdatingIntervalId: any;
   readonly PlayingStateType = PlayingStateType;
-  readonly TrackSource = TrackSource;
 
   readonly faPlay = faPlay;
   readonly faPause = faPause;
   readonly faForward = faForward;
-  readonly faPlus = faPlus;
-  readonly faSearch = faSearch;
   readonly faYoutube = faYoutube;
 
   state: PlayerState;
@@ -92,16 +89,6 @@ export class AdvertiseViewComponent implements OnInit, OnDestroy {
 
   next() {
     this.communicationService.send(createCommunicationMessageNext());
-  }
-
-  addSong() {
-    const codes = [
-      'S4vFO8W18gM',
-      'fT3wwNaEr4g',
-      'ZOhnPIHGxNM'
-    ];
-    const code = codes[Math.floor(Math.random() * codes.length)];
-    this.communicationService.send(createCommunicationMessageAddTrack(TrackSource.Youtube, code));
   }
 
   getUrl() {

@@ -1,6 +1,7 @@
-<div class="has-stuff-in-center has-text-centered">
-  <qr-code [value]="getUrl()" background="transparent" foreground="white" size="512"></qr-code>
-  <h1 class="title is-huge has-text-white mt-4">{{ getUrl() }}</h1>
+  <div class="advertisement is-flex-grow-1">
+    <qr-code [value]="getUrl()" background="transparent" foreground="white" size="512"></qr-code>
+    <h1 class="title is-huge has-text-white mt-4">{{ getUrl() }}</h1>
+  </div>
   <div class="card player-card">
     <div class="card-content p-4">
       <div class="media is-flex is-align-items-center mb-3">
@@ -52,4 +53,3 @@
       </div>
     </div>
   </div>
-</div>
