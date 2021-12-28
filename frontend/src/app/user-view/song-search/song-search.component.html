@@ -18,6 +18,10 @@
         <progress class="progress is-small is-primary" max="100"></progress>
       </ng-container>
       <ng-container *ngIf="activeViewState === ViewState.ShowResults">
+        <div *ngIf="searchResults.results.length === 0"
+             class="notification is-size-4 is-danger is-light has-text-centered">
+          Õpi kirjutama!
+        </div>
         <beets-search-result *ngFor="let searchResult of searchResults.results"
                              [searchResult]="searchResult"
                              (addTrack)="addTrack($event)"></beets-search-result>

@@ -1,0 +1,12 @@
+FROM node:14 as build
+WORKDIR /beets-server
+COPY ./ /beets-server/
+WORKDIR /beets-server/shared
+RUN npm ci
+RUN npm run build
+WORKDIR /beets-server/server
+RUN npm ci
+
+CMD npm run run
+
+EXPOSE 4300

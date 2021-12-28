@@ -6,6 +6,7 @@ import {
 } from 'beets-shared';
 import { BufferedSubject } from '../util/buffered-subject';
 import { Observable, Subject, Subscription } from 'rxjs';
+import { SERVER_PORT } from '../config';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 })
 export class CommunicationService extends Observable<CommunicationMessage> {
 
-  private readonly url = 'ws://local.beets:4300'; // TODO: config
+  private readonly url;
   private out$ = new BufferedSubject<CommunicationMessage>();
   private socket: WebSocket;
   private identityMessage: CommunicationMessage;
@@ -24,6 +25,7 @@ export class CommunicationService extends Observable<CommunicationMessage> {
       const subscription = this.in$.subscribe(subscriber);
       return () => subscription.unsubscribe();
     });
+    this.url = `ws://${window.location.hostname}:${SERVER_PORT}`;
   }
 
   setIdentityAsUser(name: string) {

@@ -8,6 +8,7 @@ export enum CommunicationMessageType {
   IdentifyAsUser = 'IdentifyAsUser',
   PlayerState = 'PlayerState',
   AddTrack = 'AddTrack',
+  RemoveTrack = 'RemoveTrack',
   SetPlayerTrack = 'SetPlayerTrack',
   Playing = 'Playing',
   Paused = 'Paused',
@@ -21,6 +22,7 @@ export type CommunicationMessage =
     CommunicationMessageIdentifyAsUser |
     CommunicationMessagePlayerState |
     CommunicationMessageAddTrack |
+    CommunicationMessageRemoveTrack |
     CommunicationMessageSetPlayerTrack |
     CommunicationMessagePlaying |
     CommunicationMessagePaused;
@@ -100,6 +102,18 @@ export function createCommunicationMessageAddTrack(source: TrackSource, code: st
     type: CommunicationMessageType.AddTrack,
     source,
     code
+  };
+}
+
+export interface CommunicationMessageRemoveTrack {
+  readonly type: CommunicationMessageType.RemoveTrack;
+  readonly id: string;
+}
+
+export function createCommunicationMessageRemoveTrack(id: string): CommunicationMessageRemoveTrack {
+  return {
+    type: CommunicationMessageType.RemoveTrack,
+    id
   };
 }
 

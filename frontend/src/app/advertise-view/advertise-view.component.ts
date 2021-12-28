@@ -92,7 +92,7 @@ export class AdvertiseViewComponent implements OnInit, OnDestroy {
   }
 
   getUrl() {
-    return window.location.href.split('/') [2]; // HAX
+    return window.location.host;
   }
 
 }

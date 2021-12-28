@@ -8,7 +8,9 @@ import {
   createCommunicationMessagePlay,
   PlayerState,
   PlayingStateType,
-  TrackSource
+  TrackSource,
+  Track,
+  createCommunicationMessageRemoveTrack
 } from 'beets-shared';
 import { faForward, faPause, faPlay, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
@@ -94,6 +96,10 @@ export class UserViewComponent implements OnInit, OnDestroy {
 
   next() {
     this.communicationService.send(createCommunicationMessageNext());
+  }
+
+  removeTrack(track: Track) {
+    this.communicationService.send(createCommunicationMessageRemoveTrack(track.id));
   }
 
   getName() {

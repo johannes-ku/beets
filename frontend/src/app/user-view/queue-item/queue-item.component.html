@@ -2,8 +2,11 @@
   <div class="card-content p-4">
     <div class="content">
       <div class="buttons ml-6 is-pulled-right">
-        <div class="button is-danger is-small">
+        <div *ngIf="!isRemoved"  class="button is-danger is-small" (click)="doRemove()">
           <fa-icon [icon]="faTrash"></fa-icon>
+        </div>
+        <div *ngIf="isRemoved" class="button is-danger is-small">
+          <fa-icon [icon]="faCircleNotch" [spin]="true"></fa-icon>
         </div>
       </div>
       <div class="">

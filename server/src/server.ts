@@ -2,6 +2,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import {
   CommunicationMessage,
   CommunicationMessageAddTrack,
+  CommunicationMessageRemoveTrack,
   CommunicationMessagePaused,
   CommunicationMessageType,
   createCommunicationMessagePause,
@@ -130,6 +131,9 @@ export class Server {
           case CommunicationMessageType.AddTrack:
             this.handleAddTrack(message, socket);
             break;
+          case CommunicationMessageType.RemoveTrack:
+            this.handleRemoveTrack(message);
+            break;
           default:
             socket.log(`Unexpected message ${message.type}`);
         }
@@ -167,6 +171,15 @@ export class Server {
     this.state.queue.push(track);
     if (this.state.currentTrack == null) {
       this.nextTrack();
+    }
+    this.stateUpdated();
+  }
+
+  private handleRemoveTrack(message: CommunicationMessageRemoveTrack) {
+    for (let i = 0; i < this.state.queue.length; i++) {
+      if (this.state.queue[i].id === message.id) {
+        this.state.queue.splice(i, 1);
+      }
     }
     this.stateUpdated();
   }

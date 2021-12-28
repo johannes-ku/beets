@@ -28,6 +28,10 @@
   overflow: hidden;
 }
 
+.media-content {
+  min-width: 0; // Prevent overflow
+}
+
 .player-card {
   border-radius: 0;
   bottom: 0;
